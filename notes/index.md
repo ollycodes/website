@@ -7,3 +7,4 @@
 - [Part 5: Testing](Part/5.md)
 - [Part 6: Static Files](Part/6.md)
 - [Part 7: Customizing the admin site](Part/7.md)
+- [Questions](questions.md)
