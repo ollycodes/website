@@ -7,7 +7,6 @@
     ```
 2. why does django have you add apps with a dot syntax?
     - ['polls.apps.PollsConfig'](https://docs.djangoproject.com/en/4.0/intro/tutorial02/)
-    - 
 
     
 3. how does the django API get `q.choice_set.all()`?
