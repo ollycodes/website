@@ -8,3 +8,4 @@
 - [Part 6: Static Files](Part/6.md)
 - [Part 7: Customizing the admin site](Part/7.md)
 - [Questions](questions.md)
+- [map](map.md)
