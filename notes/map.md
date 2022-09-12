@@ -51,25 +51,56 @@
     2. create .html templates in **app/template/app/**
         - python code can be injected with `{%%}`
         - variables can be called with `{{}}`
-    3. 
+        - use url tags: `<a href="{% url 'app_name:view_name' url.variable %}">`
+    3. namespace url tags in **app/urls.py**:
+        - add `app_name = app` above urlpatterns
+        - `url.variable` depends on if said url is assigned at URLconfs
+    4. update view in **app/views.py**
+        - `from django.template import loader`
+        - `return render(request, 'app/view_template.html', context)`
+        - context: dict of variables available to the code in the .html template
+        - raise 404 with: `context = get_object_or_404(Model_Name, pk=Model_id)`
 
 
 
 
+* Flow
+    - "ollys.com/blog/1"
+    - **core/urls.py**:
+        ```python3
+        from django.contrib import admin
+        from django.url import include, path
+        urlpatterns = [
+            path('', include('site.urls')),
+            # goto blog/urls.py
+            path('blog/', include('blog.urls')),
+            path('admin/', admin.site.urls),
+        ]
+        ```
+    - **blog/urls.py**:
+        ```python3
+        from django.urls import path
+        
+        from . import views
 
+        urlpatterns = [
+            path('', views.index, name='index'),
+            # goto entry function in views.py with blog_id as keyword argument
+            path('<int:blog_id>/', views.entry, name='entry')
+        ]
+        ```
+    - **app/views.py**:
+        ```python3
+        from django.shortcuts import render
 
+        from . import models
 
-
-
-
-
-
-
-
-
-
-
-
+        def index(request):
+            posts = models.Post.objects.all()
+            # goto template/blog/index.html with context dict(posts=posts)
+            # and user's request info
+            return render(request, 'blog/index.html', dict(posts=posts))
+        ```
 
 
 
