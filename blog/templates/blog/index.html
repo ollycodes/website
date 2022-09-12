@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>here is title.</title>
+        <title>Belma's blog</title>
     </head>
     <body>
+        <h1>Welcome to Belma's Blog!</h1>
         {% for post in posts %}
-        <h1>{{ post.title }}</h1>
+        <h2>{{ post.title }}</h2>
         <p>{{ post.body }}</p>
         {% endfor %}
 
