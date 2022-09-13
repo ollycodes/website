@@ -1,17 +1,38 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Belma's blog</title>
-    </head>
-    <nav>
-        <a href="{% url 'blog:index' %}">Belma.blog()</a>
-    </nav>
-    <body>
-        <h1>Welcome to Belma's Blog!</h1>
-        <ul>
-        {% for post in posts %}
-        <h2><a href="{% url 'blog:entry' post.id %}">{{ post.title }}</a></h2>
-        {% endfor %}
-        </ul>
-    </body>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/style.css' %}">
+    <meta charset="utf-8">
+    <meta name="description" content="Welcome to shark palace.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Belma's blog</title>
+</head>
+
+
+
+
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'blog:index' %}">Belma.blog()</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article>
+            <h1>Welcome to Belma's Blog!</h1>
+            {% for post in posts %}
+            <h2>
+                <a href="{% url 'blog:entry' post.id %}">{{ post.title }}</a>
+            </h2>
+            {% endfor %}
+        <article>
+    </header>
+</body>
 </html>
