@@ -64,8 +64,8 @@
 
 
 
-* Flow
-    - "ollys.com/blog/1"
+* from URL to View
+    - "ollys.com/blog/1" -> core/urls.py -> app/urls.py -> app/view.py
     - **core/urls.py**:
         ```python3
         from django.contrib import admin
@@ -102,6 +102,10 @@
             return render(request, 'blog/index.html', dict(posts=posts))
         ```
 
+* Models, Views, & Templates
+    - database classes are made in models, migrated via manage.py, & used in views
+    - view imports model, creates a dict out of it, sends it to template
+    - html draws from model dict, and finally displays the page to user
 
 
 * start development server

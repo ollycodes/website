@@ -1,15 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.views import generic
 
-from . import models
+from .models import Post
 
 # Create your views here.
-def index(request):
-    posts = models.Post.objects.all()
-    return render(request, 'blog/index.html', dict(posts=posts))
+class IndexView(generic.ListView):
+    template_name = 'blog/index.html'
+    context_object_name = 'posts'
 
-'''
-def entry(request, entry_id):
-    post = get_object_or_404(Post, pk=entry_id)
-    return render(request, 'blog/entry.html', dict(post=post))
-'''
+    def get_queryset(self):
+        return Post.objects.all()
+
+class EntryView(generic.DetailView):
+    model = Post
+    template_name = 'blog/entry.html'
