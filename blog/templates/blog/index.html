@@ -12,14 +12,14 @@
 </head>
 
 <body>
-    <header>
+    <header class="topbar">
             <a href="{% url 'blog:index' %}">Belma.blog()</a>
     </header>
     <main>
         <article>
-            <h1>Welcome to Belma's Blog!</h1>
+            <h1 class="title">Welcome to Belma's Blog!</h1>
             {% for post in posts %}
-            <p class="blogtitles"><a href="{% url 'blog:entry' post.id %}">{{ post.title }}</a><p>
+            <p><a href="{% url 'blog:entry' post.id %}" class="blogindex">{{ post.title }}</a><p>
             {% endfor %}
         <article>
     </header>

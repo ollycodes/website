@@ -14,15 +14,13 @@
 
 
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'blog:index' %}" class="navbar">Belma.blog()</a>
-        </nav>
+    <header class="topbar">
+            <a href="{% url 'blog:index' %}">Belma.blog()</a>
     </header>
     <main>
         <article>
-            <h2>{{ post.title }}</h2>
-            <p class="blogentry">{{ post.body}}</p>
+            <h1 class="title">{{ post.title }}</h1>
+            <p class="blog-body">{{ post.body }}</p>
         </article>
     </main>
 </body>

@@ -1,45 +1,40 @@
-:root {
-	background: #132743; 
-    --font-family: Garamond;
-    font-size: 1rem;
-    color: #dedede;
+/* Blog Style */
+*, *:before, *:after {
+    box-sizing: border-box;
 }
 
-header {
-    position: sticky;
+body {
 	background: #132743; 
-    top: 0px;
-    margin: auto;
-    padding: 2rem;
+    font-family: Garamond;
+    color: #dedede;
+    margin: 0;
+    padding: 0;
 }
 
 a {
     color: #ffb5b5;
-    font-weight: bold;
-    margin: auto;
 }
 
-
-
-h2 {
-    margin: 1rem 2rem;
-    width: 70%;
+.topbar {
+    position: sticky;
+	background: #132743; 
+    top: 0px;
+    width: 100%;
+    padding: 2rem 0  2rem 2rem;
+    border-bottom: 1px ridge #dedede;
 }
 
-h1 {
+.title {
     margin: 2rem 2rem;
-    margin-top: 0;
-    padding: 0 1rem;
-    padding-top: 0;
 }
 
-.blogtitles {
+.blogindex {
     width: 60%;
-    max-width: 80%;
-    padding: 0 2rem;
+    margin: 2rem;
+    white-space: prewrap;
 }
 
-.blogentry {
+.blog-body {
     margin: 2rem;
     padding: 0;
     width: 80%;
