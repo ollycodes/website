@@ -4,20 +4,22 @@
 }
 
 body {
-	background: #132743; 
-    font-family: Garamond;
+    background: #000;
+	/* last color: #132743; */
+    font-family: EB Garamond;
     color: #dedede;
     margin: 0;
     padding: 0;
-}
+} 
 
 a {
-    color: #ffb5b5;
+    color: #eeb9b9;
+	/* last color: #132743; */
 }
 
 .topbar {
     position: sticky;
-	background: #132743; 
+    background: #000;
     top: 0px;
     width: 100%;
     padding: 2rem 0  2rem 2rem;
@@ -34,9 +36,17 @@ a {
     white-space: prewrap;
 }
 
-.blog-body {
+.markdown {
     margin: 2rem;
     padding: 0;
     width: 80%;
-    white-space: pre-wrap;
 }
+
+.markdown pre {
+    background: #100020;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+
