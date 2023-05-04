@@ -10,15 +10,6 @@ venv.bak/
 # git
 .git
 
-
-# Django
-*.log
-*.pot
-*.pyc
-__pycache__
-db.sqlite3
-media
-
 # Backup files
 *.bak
 
@@ -26,4 +17,6 @@ media
 *.py[cod] 
 *$py.class
 
-
+# Website
+build/
+notes.md
