@@ -1,7 +1,0 @@
-[# Seventh Post](content/blog/posts/seven.md)
-[# Sixth Post](content/blog/posts/six.md)
-[# Fifth Post](content/blog/posts/five.md)
-[# Fourth Post](content/blog/posts/four.md)
-[# Test Post](content/blog/posts/test.md)
-[# Third Post](content/blog/posts/three.md)
-[# Second Post](content/blog/posts/two.md)
