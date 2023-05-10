@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1> Latest </h1>
+    {% for blog in blogs %}
+    <div>
+        <h2><a href="{{ blog.href }}">{{ blog.title }}</a></h2>
+    </div>
+    {% endfor %}
+{% endblock body %}
