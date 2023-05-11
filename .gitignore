@@ -19,7 +19,4 @@ venv.bak/
 
 # Website
 build/
-content/
-templates/
-static/
 notes.md
