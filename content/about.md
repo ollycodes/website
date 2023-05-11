@@ -1,6 +1,7 @@
 # About
 
-Hi! 👋🏽 I'm Olly, a fullstack software engineer.
+Hi! 👋🏽 I'm Olly, a fullstack developer from SoCal.
+I write 
 
 # Contact
 
