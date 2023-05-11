@@ -8,23 +8,20 @@
     <title>{% block title %}OllyCodes{% endblock title %}</title>
 </head>
 <nav>
-  <ul>
-    <li><a href="/index.html">Home</a></li>
-    <li><a href="#">About Me</a></li>
-    <li><a href="/blog/latest.html">Blog</a></li>
-    <li><a href="#">Contact Me</a></li>
-    <li><a 
-        href="https://github.com/ollycodes"
+    <a href="/index.html">Home</a>
+    <a href="#">About Me</a>
+    <a href="/blog/latest.html">Blog</a>
+    <a href="#">Contact Me</a>
+    <a 
+        href="https://github.com/ollycodes" 
         target="_blank" 
         rel="noopener noreferrer">
-            GitHub
-        </a>
-    </li>
-  </ul>
+        GitHub
+    </a>
 </nav>
 
 <body>
-    <div>
+    <div id="content">
         {% block body %}
         {{ content|safe }}
         {% endblock body %}

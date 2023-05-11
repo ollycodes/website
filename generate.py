@@ -5,7 +5,6 @@ from jinja2 import Environment, FileSystemLoader
 from markdown import markdown
 
 # for updating latest.md
-
 def get_metadata(pages: list[dict]) -> list[dict]:
     """ retrieves title, datetime, and href. """
     for page in pages:
@@ -62,7 +61,7 @@ def get_files(path) -> list[dict]:
         }
         for root, _, files in os.walk(path)
         for file in files
-        if file not in ("latest.md")
+        if files
     ]
     return pages
 
@@ -81,6 +80,22 @@ def make_pages(pages: list[dict]):
             f.write(page["content"])
             print(f"created: {page['htmlpath']}")
 
+def import_css():
+    cssOutputDir = "build/static/"
+    os.mkdir(cssOutputDir)
+    css_files = [
+        shutil.copyfile(
+            os.path.join(root, file), 
+            os.path.join(cssOutputDir, file)
+        )
+        for root, _, files in os.walk("static/")
+        for file in files
+        if files
+    ]
+    for style in css_files:
+        print(f"copied {style}")
+
+
 def generate_website():
     clean_outputDir()
     pages = get_files("content/")
@@ -90,3 +105,4 @@ def generate_website():
 if __name__ == "__main__":
     generate_website()
     update_latest()
+    import_css()
