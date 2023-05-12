@@ -12,50 +12,50 @@ nav {
 
 nav a {
     text-decoration: none;
-    color: #555;
+    color: black;
     font-weight: bold;
     margin-right: 20px;
 }
 
 nav a:hover {
-    color: #333;
+    color: #9b59b6;
 }
 
 body {
     font-size: 16px;
-    color: #555;
+    color: black;
 }
 
-#content {
+.content {
     margin: 0 auto;
     max-width: 768px;
-    color: #555;
 }
 
-#content h1, h2, h3, h4, h5, h6 {
+.content h1, h2, h3, h4, h5, h6 {
     font-family: 'Questrial', sans-serif;
+    color: #9b59b6;
 }
 
-#content p {
+.content p {
     font-family: 'Merriweather', sans-serif;
+    color: black;
 }
 
-#posts {
+.latest-posts {
     margin: 0 0 10px 0;
 }
 
-.date {
+.latest-posts a {
+    color: black;
+    font-weight: bold;
+}
+
+.latest-posts p {
+    font-family: 'Questrial', sans-serif;
     color: #a9a9a9;
     margin: 0;
 }
 
-#latest-post-title {
-    color: #555;
-    font-weight: bold;
+.latest-posts a:hover {
+    color: #9b59b6;
 }
-
-#latest-post-title:hover {
-    color: deeppink;
-}
-
-

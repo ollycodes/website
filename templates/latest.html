@@ -3,11 +3,9 @@
 {% block body %}
 <h1> Latest </h1>
     {% for post in posts %}
-    <div id="posts">
-        <a id="latest-post-title" href="{{ post.href }}">{{ post.title }}</a>
-        <div>
-            <p class="date">{{ post.date }}</p>
-        </div>
+    <div class="latest-posts">
+        <a href="{{ post.href }}">{{ post.title }}</a>
+        <p>{{ post.date }}</p>
     </div>
     {% endfor %}
 {% endblock body %}
