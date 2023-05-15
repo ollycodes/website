@@ -1,8 +1,3 @@
-# About
-
-<<<<<<< HEAD
-Hi! 👋🏽 I'm Olly, a fullstack software engineer.
-=======
 # About this website
 
 On this website you'll find blog posts about philosophy, programming, and many other topics I'm interested in.
@@ -16,11 +11,11 @@ In my spare time, I enjoy playing video games, reading, and programming. My favo
 I’m always looking for new challenges and opportunities to learn and grow. I’m confident that I have the skills and experience to be a valuable asset to your team. ✨
 
 If you’re interested in learning more about me, please feel free to contact me.
->>>>>>> 982707a (wrote about page.)
 
 # Contact
 
 Email: ollycodes@pm.me
+
 Github: <a 
     href="https://github.com/ollycodes" 
     target="_blank" 
