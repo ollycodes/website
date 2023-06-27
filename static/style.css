@@ -35,12 +35,24 @@
 a {
     text-decoration: none;
     font-weight: bold;
-    text-decoration: 2px underline transparent;
-    transition: text-decoration 300ms ease;
+    position: relative;
+    display: inline-block;
 }
 
-a:hover {
-    text-decoration-color: var(--pink);
+a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    height: 1px;
+    width: 0;
+    background-color: var(--pink);
+    transition: width 0.3s ease-in-out;
+    transform: translateX(-50%);
+}
+
+a:hover::after {
+    width: 100%;
     color: var(--pink);
 }
 
@@ -56,6 +68,10 @@ nav {
 
 nav a {
     color: var(--text);
+}
+
+nav a:hover {
+    color: var(--pink);
 }
 
 html {
