@@ -1,112 +1,87 @@
-import os
-import shutil
+import os, shutil
 from datetime import datetime
+from dataclasses import dataclass
 from jinja2 import Environment, FileSystemLoader
 from markdown import markdown
 
-# for updating latest.md
-def get_metadata(pages: list[dict]) -> list[dict]:
-    """ retrieves title, datetime, and href. """
+INPUT_DIR, OUTPUT_DIR = "content/", "build/"
+
+def refresh_dir():
+    if os.path.exists(OUTPUT_DIR):
+        shutil.rmtree(OUTPUT_DIR)
+    for root, _, _ in os.walk(INPUT_DIR):
+        os.mkdir(root.replace(INPUT_DIR, OUTPUT_DIR))
+    print(f"Cleaned {OUTPUT_DIR}")
+
+    os.mkdir(static_output := OUTPUT_DIR + "static/")
+    for root, _, files in os.walk("static/"):
+        for file in files:
+            shutil.copyfile(
+                os.path.join(root, file),
+                (style := os.path.join(static_output, file))
+            )
+            print(f"copied {style}")
+
+def get_latest_posts():
     date_format = "%Y-%m-%d.md"
-    for page in pages:
-        with open(page["mdpath"], "r") as f:
-            page["title"] = f.readline().strip("\n# ")
-        page["datetime"] = datetime.strptime(page["filename"], date_format)
-        page["date"] = page["datetime"].strftime("%b %Y")
-        page["href"] = page["htmlpath"].replace("build/", "/")
-    return pages
-
-def get_latest() -> list[dict]:
-    pages = get_files("content/blog/posts/")
-    pages = get_metadata(pages)
-    pages = sorted(pages, key=lambda x: x['datetime'], reverse=True)
-
-    latest = [
+    posts = [
         {
-            "title": page["title"], 
-            "href": page["href"],
-            "date": page["date"],
+            "path": os.path.join(root, file),
+            "date": datetime.strptime(file, date_format),
         }
-        for page in pages
-    ]
-    return latest
-
-def update_latest_post_entries():
-    env = Environment(loader=FileSystemLoader("templates/"))
-    latest_template = env.get_template("latest.html")
-
-    posts = get_latest()
-    with open("build/blog/latest.html", "w") as f:
-        f.write(latest_template.render(posts=posts))
-    print("updated latest")
-
-# for regular webpages
-def clean_outputDir():
-    inputDir, outputDir = "content/", "build/"
-    if os.path.exists(outputDir):
-            shutil.rmtree(outputDir)
-    [
-        os.mkdir(root.replace(inputDir, outputDir)) 
-        for root, _, _ in os.walk(inputDir)
-    ]
-
-def get_files(path) -> list[dict]:
-    pages = [
-        {
-            "filename": file, 
-            "mdpath": os.path.join(root, file),
-            "htmlpath": htmlpath(os.path.join(root, file))
-        }
-        for root, _, files in os.walk(path)
+        for root, _, files in os.walk(INPUT_DIR)
+        if "posts" in root
         for file in files
-        if files
     ]
-    return pages
+    for post in posts:
+        with open(post["path"], "r") as f:
+            post["title"] = f.readline().strip("\n# ")
+        post["href"] = post["path"].lstrip("content").replace(".md", ".html")
+        post["fdate"] = post["date"].strftime("%b %Y")
+    return sorted(posts, key=lambda x: x["date"], reverse=True)
 
-def htmlpath(mdpath: str) -> str:
-    inputDir, outputDir = "content/", "build/"
-    return mdpath.replace(".md", ".html").replace(inputDir, outputDir)
+@dataclass
+class Site:
+    pages: list[dict]
+    latest: list[dict]
+    env: Environment = Environment(loader=FileSystemLoader("templates/"))
 
-def get_md_content(pages: list[dict]) -> list[dict]:
-    env = Environment(loader=FileSystemLoader("templates/"))
-    base_template = env.get_template("base.html")
+    @classmethod
+    def get_pages(cls):
+        pages = [
+            {"root": root, "filename": file}
+            for root, _, files in os.walk(INPUT_DIR)
+            if files for file in files
+        ]
 
-    for page in pages:
-        with open(page["mdpath"], "r") as f:
-            page["content"] = base_template.render(content=markdown(f.read()))
-    return pages
+        patterns = {".md": ".html", INPUT_DIR: OUTPUT_DIR}
+        for page in pages:
+            page["htmlpath"] = page["mdpath"] = os.path.join(page["root"], page["filename"])
+            for key, value in patterns.items():
+                page["htmlpath"] = page["htmlpath"].replace(key, value)
 
-def make_pages(pages: list[dict]):
-    for page in pages:
-        with open(page["htmlpath"], "w") as f:
-            f.write(page["content"])
-            print(f"created: {page['htmlpath']}")
+        latests = get_latest_posts()
+        return cls(pages, latests)
 
-def import_css():
-    cssOutputDir = "build/static/"
-    os.mkdir(cssOutputDir)
-    css_files = [
-        shutil.copyfile(
-            os.path.join(root, file), 
-            os.path.join(cssOutputDir, file)
-        )
-        for root, _, files in os.walk("static/")
-        for file in files
-        if files
-    ]
-    for style in css_files:
-        print(f"copied {style}")
+    def create(self):
+        template_base = self.env.get_template("base.html")
+
+        for page in self.pages:
+            with open(page["mdpath"], "r") as f:
+                page["content"] = template_base.render(content=markdown(f.read()))
+            with open(page["htmlpath"], "w") as f:
+                f.write(page["content"])
+                print(f"created: {page['htmlpath']}")
+
+        template_latest = self.env.get_template("latest.html")
+        with open("build/blog/latest.html", "w") as f:
+            f.write(template_latest.render(posts=self.latest))
+        print("updated latest")
 
 def generate_website():
-    clean_outputDir()
-    pages = get_files("content/")
-    pages = get_md_content(pages)
-    make_pages(pages)
-
-def main():
-    generate_website()
-    update_latest_post_entries()
-    import_css()
+    refresh_dir()
+    pages = Site.get_pages()
+    pages.create()
 
 if __name__ == "__main__":
-    main()
+    generate_website()
