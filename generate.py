@@ -2,9 +2,10 @@ import os, shutil
 from datetime import datetime
 from dataclasses import dataclass
 from jinja2 import Environment, FileSystemLoader
-from markdown import markdown
+from markdown import Markdown
 
 INPUT_DIR, OUTPUT_DIR = "content/", "build/"
+IGNORE_LIST = [".pdf", ".html"]
 
 def refresh_dir():
     if os.path.exists(OUTPUT_DIR):
@@ -18,9 +19,18 @@ def refresh_dir():
         for file in files:
             shutil.copyfile(
                 os.path.join(root, file),
-                (style := os.path.join(static_output, file))
+                os.path.join(static_output, file)
             )
-            print(f"copied {style}")
+            print(f"copied {file} to {static_output}")
+
+    for root, _, files in os.walk(INPUT_DIR):
+        for file in files:
+            if any(ext in file for ext in IGNORE_LIST):
+                shutil.copyfile(
+                    os.path.join(root, file),
+                    os.path.join(OUTPUT_DIR, file)
+                )
+                print(f"copied {file} to {OUTPUT_DIR}")
 
 def get_latest_posts():
     date_format = "%Y-%m-%d.md"
@@ -52,6 +62,7 @@ class Site:
             {"root": root, "filename": file}
             for root, _, files in os.walk(INPUT_DIR)
             if files for file in files
+            if not any(ext in file for ext in IGNORE_LIST)
         ]
 
         patterns = {".md": ".html", INPUT_DIR: OUTPUT_DIR}
@@ -60,22 +71,23 @@ class Site:
             for key, value in patterns.items():
                 page["htmlpath"] = page["htmlpath"].replace(key, value)
 
-        latests = get_latest_posts()
-        return cls(pages, latests)
+        latest = get_latest_posts()
+        return cls(pages, latest)
 
     def create(self):
-        template_base = self.env.get_template("base.html")
+        base_template = self.env.get_template("base.html")
+        md = Markdown(extensions=['markdown.extensions.attr_list'])
 
         for page in self.pages:
             with open(page["mdpath"], "r") as f:
-                page["content"] = template_base.render(content=markdown(f.read()))
+                page["content"] = base_template.render(content=md.convert((f.read())))
             with open(page["htmlpath"], "w") as f:
                 f.write(page["content"])
                 print(f"created: {page['htmlpath']}")
 
-        template_latest = self.env.get_template("latest.html")
-        with open("build/blog/latest.html", "w") as f:
-            f.write(template_latest.render(posts=self.latest))
+        latest_template = self.env.get_template("latest.html")
+        with open(os.path.join(OUTPUT_DIR, "blog/latest.html"), "w") as f:
+            f.write(latest_template.render(posts=self.latest))
         print("updated latest")
 
 def generate_website():

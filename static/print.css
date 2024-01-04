@@ -1,0 +1,19 @@
+body {
+    padding: 0;
+    font-size: 12px;
+    line-height: 150%;
+}
+
+.resume {
+    box-shadow: none;
+    border: none;
+    max-width: none;
+}
+
+.noprint {
+    display: none;
+}
+
+li {
+    margin: 0;
+}
