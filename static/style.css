@@ -114,11 +114,46 @@ body {
     padding: 5px;
     background: var(--mantle);
     border: solid 2px var(--lavender);
+    overflow-x: auto;
 }
 
 .content code {
     font-family: monospace;
+    color: var(--yellow);
+    word-wrap: break-word;
+    font-weight: bold;
+}
+
+.content p code {
+    font-family: monospace;
+    color: var(--yellow);
+    font-weight: bold;
+}
+
+.content code span {
+    color: var(--overlay0);
+}
+
+.content table {
+    border: inset 2px var(--crust);
+    background-color: var(--mantle);
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+.content thead th, td {
+    color: var(--yellow);
+    font-weight: bold;
+}
+
+.content th, td {
+    border: solid 1px var(--subtext1);
     color: var(--text);
+    padding: 15px 10px;
+
+}
+.content code span {
+    color: var(--overlay0);
 }
 
 .content a {
