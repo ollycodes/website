@@ -6,6 +6,11 @@ from markdown import Markdown
 
 INPUT_DIR, OUTPUT_DIR = "content/", "build/"
 IGNORE_LIST = [".pdf", ".html"]
+ext_list = [
+    'markdown.extensions.attr_list', 
+    'markdown.extensions.tables',
+    'markdown.extensions.admonition'
+]
 
 def refresh_dir():
     if os.path.exists(OUTPUT_DIR):
@@ -76,7 +81,7 @@ class Site:
 
     def create(self):
         base_template = self.env.get_template("base.html")
-        md = Markdown(extensions=['markdown.extensions.attr_list'])
+        md = Markdown(extensions=ext_list)
 
         for page in self.pages:
             with open(page["mdpath"], "r") as f:
