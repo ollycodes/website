@@ -1,3 +1,4 @@
+/* Defaults */
 :root {
     /* Cattppuccin Frappe */
 	--rosewater: #f2d5cf;
@@ -32,11 +33,34 @@
     box-sizing: border-box;
 }
 
+html {
+    background-color: var(--base);
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+}
+
+
+nav {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 5vh;
+    /* font-size: normal; */
+}
+
+nav a {
+    color: var(--text);
+    font-size: large;
+}
+
 a {
     text-decoration: none;
     font-weight: bold;
     position: relative;
-    display: inline-block;
+    /* display: inline-block; */
 }
 
 a::after {
@@ -44,68 +68,46 @@ a::after {
     position: absolute;
     left: 50%;
     bottom: 0;
-    height: 1px;
+    height: 2px;
     width: 0;
     background-color: var(--pink);
     transition: width 0.3s ease-in-out;
-    transform: translateX(-50%);
+    transform: translatex(-50%);
 }
 
 a:hover::after {
     width: 100%;
+}
+
+a:hover {
     color: var(--pink);
 }
 
-nav {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    background-color: var(--surface0);
-    height: 4vh;
-    font-size: normal;
-}
-
-nav a {
-    color: var(--text);
-}
-
-nav a:hover {
-    color: var(--pink);
-}
-
-html {
-    background-color: var(--base);
-}
-
-body {
-    margin: 0;
-}
-
+/* Markdown to HTML Styling */
 .content {
-    font-size: 16px;
     max-width: 768px;
     margin: 0 auto;
 }
 
-@media (min-width: 800px) {
+@media screen and (min-width: 800px) {
     .content {
         margin: 0 auto;
     }
 }
 
-@media (max-width: 799px) {
+@media screen and (max-width: 799px) {
     .content {
-        margin: auto 4rem;
+        margin: auto 2rem;
     }
 }
 
-.content h1, h2, h3, h4, h5, h6 {
-    font-family: 'Questrial', sans-serif;
+:is(h1, h2, h3, h4, h5, h6) {
+    font-family: 'questrial', sans-serif;
     color: var(--mauve);
 }
 
 .content p, .content ol, .content ul {
-    font-family: 'Merriweather', sans-serif;
+    font-family: 'merriweather', sans-serif;
     color: var(--text);
     line-height: 1.7;
 }
@@ -135,23 +137,38 @@ body {
 }
 
 .content table {
-    border: inset 2px var(--crust);
-    background-color: var(--mantle);
     border-collapse: collapse;
-    margin: 1em 0;
+    margin: 1em 0 2em 0;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    text-align: left;
+    table-layout: fixed;
+    width: 100%;
 }
 
-.content thead th, td {
-    color: var(--yellow);
+.content thead tr {
+    color: var(--lavender);
+    background-color: var(--surface0);
     font-weight: bold;
 }
 
-.content th, td {
-    border: solid 1px var(--subtext1);
+.content thead th, tbody td {
     color: var(--text);
-    padding: 15px 10px;
-
+    padding: 20px;
 }
+
+.content tbody tr {
+    border-bottom: 1px solid var(--surface2);
+}
+
+.content tbody tr:nth-of-type(even) {
+    background-color: var(--mantle);
+}
+
+.content tbody tr:last-of-type {
+    border-bottom: 2px solid var(--surface0);
+}
+
 .content code span {
     color: var(--overlay0);
 }
