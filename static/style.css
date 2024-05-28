@@ -193,6 +193,11 @@ tbody tr:last-of-type {
     }
 }
 
+.content p:last-child {
+    margin-bottom: 15em;
+}
+
+
 /* Latest Post Styling*/
 .post p {
     font-family: 'Questrial', sans-serif;

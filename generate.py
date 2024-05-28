@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from jinja2 import Environment, FileSystemLoader
 from markdown import Markdown
 
-INPUT_DIR, OUTPUT_DIR = "content/", "build/"
+INPUT_DIR, OUTPUT_DIR, = "content/", "build/"
 IGNORE_LIST = [".pdf", ".html"]
 ext_list = [
     'markdown.extensions.attr_list', 
@@ -19,14 +19,14 @@ def refresh_dir():
         os.mkdir(root.replace(INPUT_DIR, OUTPUT_DIR))
     print(f"Cleaned {OUTPUT_DIR}")
 
-    os.mkdir(static_output := OUTPUT_DIR + "static/")
     for root, _, files in os.walk("static/"):
+        os.mkdir(static_output := OUTPUT_DIR + root)
         for file in files:
             shutil.copyfile(
                 os.path.join(root, file),
                 os.path.join(static_output, file)
             )
-            print(f"copied {file} to {static_output}")
+            print(f"Copied {file} to {static_output}.")
 
     for root, _, files in os.walk(INPUT_DIR):
         for file in files:
@@ -35,25 +35,7 @@ def refresh_dir():
                     os.path.join(root, file),
                     os.path.join(OUTPUT_DIR, file)
                 )
-                print(f"copied {file} to {OUTPUT_DIR}")
-
-def get_latest_posts():
-    date_format = "%Y-%m-%d.md"
-    posts = [
-        {
-            "path": os.path.join(root, file),
-            "date": datetime.strptime(file, date_format),
-        }
-        for root, _, files in os.walk(INPUT_DIR)
-        if "posts" in root
-        for file in files
-    ]
-    for post in posts:
-        with open(post["path"], "r") as f:
-            post["title"] = f.readline().strip("\n# ")
-        post["href"] = post["path"].lstrip("content").replace(".md", ".html")
-        post["fdate"] = post["date"].strftime("%b %Y")
-    return sorted(posts, key=lambda x: x["date"], reverse=True)
+                print(f"Copied {file} to {OUTPUT_DIR}.")
 
 @dataclass
 class Site:
@@ -70,14 +52,23 @@ class Site:
             if files for file in files
             if not any(ext in file for ext in IGNORE_LIST)
         ]
-        patterns = {".md": ".html", INPUT_DIR: OUTPUT_DIR}
 
+        patterns = {".md": ".html", INPUT_DIR: OUTPUT_DIR}
+        date_format = "%Y-%m-%d.md"
+        post_pages = []
         for page in pages:
             page["htmlpath"] = page["mdpath"] = os.path.join(page["rootpath"], page["filename"])
             for key, value in patterns.items():
                 page["htmlpath"] = page["htmlpath"].replace(key, value)
+            if "posts" in page["rootpath"]:
+                page["date"] = datetime.strptime(page["filename"], date_format)
+                with open(page["mdpath"], "r") as f:
+                    page["title"] = f.readline().strip("\n# ")
+                page["fdate"] = page["date"].strftime("%b %Y")
+                page["href"] = page["htmlpath"].removeprefix(OUTPUT_DIR)
+                post_pages.append(page)
 
-        latest = get_latest_posts()
+        latest = sorted(post_pages, key=lambda x: x["date"], reverse=True)
         return cls(pages, latest)
 
     def create(self):
@@ -88,6 +79,7 @@ class Site:
             with open(page["mdpath"], "r") as f:
                 context: t.Dict[str, t.Any] = {"markdown_content": self.md.convert(f.read()),}
                 context["posts"] = self.latest if "index.md" in page["mdpath"] else None
+                context["post"] = page if "post" in page["mdpath"] else None
 
             with open(page["htmlpath"], "w") as f:
                 if "index.md" in page["mdpath"]:
