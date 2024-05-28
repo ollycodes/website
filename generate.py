@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from jinja2 import Environment, FileSystemLoader
 from markdown import Markdown
 
-INPUT_DIR, OUTPUT_DIR, = "content/", "build/"
+INPUT_DIR, OUTPUT_DIR, = "content/", "docs/"
 IGNORE_LIST = [".pdf", ".html"]
 ext_list = [
     'markdown.extensions.attr_list', 
