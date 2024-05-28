@@ -5,11 +5,23 @@
     <meta name="description" content="OllyCode's website."/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css" href="/static/style.css"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/site.webmanifest">
     <link 
         rel="stylesheet" 
         href="https://fonts.googleapis.com/css2?family=Questrial&family=Merriweather"
     />
-    <title>{% block title %}OllyCodes{% endblock title %}</title>
+    <title>
+        {% block title %}
+            {% if post %}
+                {{ post.title }}
+            {% else %}
+                OllyCodes
+            {% endif %}
+        {% endblock title %}
+    </title>
 </head>
 <nav>
     <a href="/index.html">Home</a>
@@ -21,6 +33,7 @@
         GitHub
     </a>
 </nav>
+
 
 <body>
     <div class="content">
