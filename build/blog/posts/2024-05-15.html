@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="description" content="OllyCode's website."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/site.webmanifest">
+    <link 
+        rel="stylesheet" 
+        href="https://fonts.googleapis.com/css2?family=Questrial&family=Merriweather"
+    />
+    <title>
+        
+            
+                Practical Tips for Neovim
+            
+        
+    </title>
+</head>
+<nav>
+    <a href="/index.html">Home</a>
+    <a href="/resume.html">Resume</a>
+    <a
+        href="https://github.com/ollycodes" 
+        target="_blank" 
+        rel="noopener noreferrer">
+        GitHub
+    </a>
+</nav>
+
+
+<body>
+    <div class="content">
+        
+
+        <h1>Practical Tips for Neovim</h1>
+<h2>Introduction</h2>
+<p>Learning how to use Neovim productively can be daunting or seemingly futile if you come from mouse-dependent GUIs. (That's most of us these days, if we're being honest.) It can be especially difficult if you want Neovim to replicate the same bells and whistles found in other contemporary word processors and code editors. For that you'll need to invest a lot of hours of research along with a lot of trial and error to set up the <em>✨💖perfect environment💖✨</em>. Luckily, Neovim is a flexible text editor and you don't need to know all its commands to use it effectively. In this article I'll be sharing a few things I found useful when I started using Neovim.</p>
+<p>Before we begin, it's worth mentioning a few things. The instructions in this post assume you're in a Debian-based environment and that you have some cursory knowledge of Linux and Neovim. If you're looking for a good Linux reference book, I highly recommend the <a href="https://a.co/d/j0HQhco" rel="noopener noreferrer" target="blank"><em>Linux Pocket Guide</em></a> by Daniel Barrett. And, if you haven't used Neovim's built-in <a href="https://neovim.io/doc/user/usr_01.html#vimtutor" rel="noopener noreferrer" target="blank">tutorial</a>, I recommend you try <code>:Tutor</code> before continuing. Lastly, you can always use the <code>:help</code> command on any of the features mentioned to pull up the Neovim docs from Neovim!</p>
+<h2>A Proper Installation</h2>
+<p>My first tip is that you understand how Neovim is installed on your computer and know what version you're running. This is essential if you plan on using plugins as they might not work on older versions. Certain features might also not be available and should you find an issue with Neovim, knowing how Neovim was installed and how to fix an install is great knowledge to have. </p>
+<p>Neovim can be installed in a variety of ways, but from my experience, I think the latest stable appimage found on Neovim's <a href="https://github.com/neovim/neovim/releases" rel="noopener noreferrer" target="blank">Github release page</a> is the best and easiest way to install Neovim. Part of why I like this approach is that appimages are easy to swap out and easy to manage. You might have to manually set this up, but at least it won't interact with your update habits; a <code>sudo apt update &amp;&amp; upgrade</code> will not change your Neovim version which in turn won't break your plugins or settings.</p>
+<p>If you've never used an appimage, here's a set of general instructions. Open a terminal in the folder where you've downloaded the appimage. Note, your shell's rc file is usually in $HOME and its name is based on what shell you're using. (BaSH:<code>.bashrc</code>, Zsh:<code>.zshrc</code>)</p>
+<ol>
+<li>make sure the appimage is executable. (You can also right-click the appimage, go to properties and checkmark "Allow executing file as program".)
+    <pre><code>chmod +x nvim.appimage</code></pre></li>
+<li>Move Neovim to <code>$HOME/.local/bin</code>; here I'm also renaming it to just 'neovim'
+    <pre><code>mv nvim.appimage /$HOME/.local/bin/neovim</code></pre></li>
+<li>Add <code>$HOME/.local/bin</code> to your PATH in your shell's rc file.
+    <pre><code>export PATH=$HOME/.local/bin:$PATH</code></pre></li>
+<li>Restart your terminal or source the shell settings file like so
+    <pre><code>source ~/.bashrc</code></pre></li>
+<li>Now call Neovim from your terminal.
+    <pre><code>neovim</code></pre></li>
+</ol>
+<p>Before we move on, it's worth also knowing where the default locations of your settings, data, and log files are. The config directory is <code>~/.config/nvim/</code>. The data directory is <code>~/.local/share/nvim</code>. Logs are in <code>~/.local/state/nvim</code>.</p>
+<p>Further Reading:</p>
+<ul>
+<li><a href="https://neovim.io/doc/user/starting.html#standard-path" rel="noopener noreferrer" target="blank">Standard Paths</a></li>
+</ul>
+<h2>Using Motions effectively</h2>
+<p>Moving around in Neovim is probably the hardest hurdle for most new users to get accustomed to. It's tempting to want to reach out for the mouse or arrow keys. (Don't.) Movement in Neovim is built around the home row, it's meant to be paired with your touch-typing skills and this might feel strange at first when you come from a mouse-dependent GUI.</p>
+<h3>Motions</h3>
+<p>My best suggestion is to practice touch-typing. My second best suggestion is to experiment with all the motions Neovim has. Included below is a non-exhaustive list of motions you ought to at least know about. You need not use them all, but they might help you better understand how movement works in Neovim.</p>
+<table>
+<thead>
+<tr>
+<th>Word Motions</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>w</code></td>
+<td>Move 1 word forward, land on the first character.</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>Move 1 word back, land on the first character.</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>Move 1 word forward, land on the last character.</td>
+</tr>
+<tr>
+<td><code>ge</code></td>
+<td>Move 1 word back, land on the last character.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Object Motions</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(</code></td>
+<td>Moves 1 sentence backward.</td>
+</tr>
+<tr>
+<td><code>)</code></td>
+<td>Moves 1 sentence forward.</td>
+</tr>
+<tr>
+<td><code>{</code></td>
+<td>Moves 1 paragraph backward.</td>
+</tr>
+<tr>
+<td><code>}</code></td>
+<td>Moves 1 paragraph forward.</td>
+</tr>
+</tbody>
+</table>
+<p>Object and Word motions are great when writing human-oriented languages, especially when writing long form content. Note, these motions can move you beyond the current line the cursor is on. (ex. Pressing <code>w</code> at the end of a line will move you to the next line down.) Also, keep in mind that you can pair these motions with operations such as <code>d</code> (delete) or <code>y</code> (yank) and prepend numbers to move in multiples.</p>
+<table>
+<thead>
+<tr>
+<th>Left-Right Motions</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Move to the start of the line.</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>Move to the end of the line.</td>
+</tr>
+<tr>
+<td><code>f{char}</code></td>
+<td>Move to the next <code>{char}</code> to the right.</td>
+</tr>
+<tr>
+<td><code>F{char}</code></td>
+<td>Move to the next <code>{char}</code> to the left.</td>
+</tr>
+<tr>
+<td><code>t{char}</code></td>
+<td>Move one before the next <code>{char}</code> to the right.</td>
+</tr>
+<tr>
+<td><code>T{char}</code></td>
+<td>Move after the next <code>{char}</code> to the left.</td>
+</tr>
+</tbody>
+</table>
+<p>Left-right motions are limited to the line you're on, they will never move you beyond the current line. Just like the object and word motions, the search motions on this list can have numbers prepended, such as <code>2fo</code> to find the second instance of o on the line. (<code>{char}</code> is case-sensitive.)</p>
+<table>
+<thead>
+<tr>
+<th>Up-Down Motions</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>G</code></td>
+<td>Jump to the last line.</td>
+</tr>
+<tr>
+<td><code>gg</code></td>
+<td>Jump to the first line.</td>
+</tr>
+<tr>
+<td><code>:{num}</code></td>
+<td>Jump to the line number.</td>
+</tr>
+<tr>
+<td><code>{num}%</code></td>
+<td>Jump to a percentage on the buffer. <code>50%</code> would be halfway.</td>
+</tr>
+</tbody>
+</table>
+<p>Up-down motions move you linewise through a document. While this list is small, their use comes up often.</p>
+<p>The last thing I mention in this part is the search command. It's not a motion but it can be used as one. use <code>/</code> followed by the pattern you want to search. The command will jump you to the next instance if it finds one. Use <code>n</code> to jump to the next instance or <code>N</code> for the previous instance, the search wraps around the file. You can search in reverse with <code>?</code>. By default this search is case-sensitive.</p>
+<h3>Marks</h3>
+<p>Marks are little bookmarks that you can quickly return to. There are two types of marks, local and global. Local marks only work within their buffer and can be used in conjunction with operations. Global marks work between buffers, but they cannot be used with operations unless the mark is in the current buffer.</p>
+<p>To set a mark, use <code>m</code> in normal mode, followed by a letter (<code>m{a-zA-Z}</code>). The letter case is what determines whether the mark is local or global. Lowercase is for local, uppercase is for global. In order to return to a mark, use a backtick or single quote followed by the letter you assigned that mark (<code>`{a-zA-Z}</code> or <code>'{a-zA-Z}</code>). To delete a mark, use the <code>:delmarks</code> command followed by the mark(s) you'd like to remove. For example, <code>:delmarks A-Z</code> deletes all global marks from A to Z. </p>
+<p>There's a couple things to note when working with marks. The mark will save the cursor line <strong>and</strong> column position. If the column position is deleted, the mark will return you to the next closest column. If the line is deleted, the mark will no longer work, unless you redo or undo that line deletion. Since local marks are restricted to their buffer it's possible to assign the same local mark across multiple buffers. </p>
+<p>Apart from alphabet marks there are numeric marks. <code>0-9</code> marks are unique in that they store a history of the last cursor (line and column) position along with its file association from previous Neovim sessions. Both global and numeric marks are updated to the shada file when exiting Neovim so they can be used when you next open Neovim. <code>`0</code> is set to the last file and cursor position when exiting Neovim from a file buffer. For example, say I saved and quit from <code>init.nvim</code> at line 10 column 23. Opening Neovim and calling mark <code>`0</code> will return me to line 10, column 23 of <code>init.nvim</code>; notice that I don't have to open the file first in order to return to this mark since it's global. </p>
+<p>As for the previous 0 mark, it will be set to <code>`1</code> and so on, though Neovim will omit duplicates if you happen to have a session that ends in the same place. Therefore closing Neovim on line 10, column 23 will not save again, but if I moved to column 20, it would save that new position.</p>
+<p>One final thing to note, say you jumped somewhere by mistake, you can use <code>``</code> to jump right back to where you were!</p>
+<p>Further Readings:</p>
+<ul>
+<li><a href="https://neovim.io/doc/user/motion.html" rel="noopener noreferrer" target="blank">Motions</a></li>
+<li><a href="https://neovim.io/doc/user/motion.html#mark-motions" rel="noopener noreferrer" target="blank">Marks</a></li>
+<li><a href="https://neovim.io/doc/user/pattern.html#search-commands" rel="noopener noreferrer" target="blank">Search Command</a></li>
+</ul>
+<h2>Buffers, Netrw, and Windows</h2>
+<p>Using buffers, Netrw, and windows effectively go hand in hand when it comes to creating an efficient and cohesive work environment and it's likely the first point of interest when looking at Neovim in action. Being able to open multiple files concurrently to edit, navigate, and cross-reference helps immensely when working on any project, but it can be easy to get lost if you're only used to having one file open at a time.</p>
+<p>To start, buffers are in-memory copies of opened files. Windows are viewports for those buffers. When you open a file, Neovim creates a buffer of the file and then displays it on a window. Opening Neovim without a file argument will create an empty buffer on a window with its start page information. </p>
+<p>You can arrange your workspace however you like. The most common arrangement in a workspace I've seen is one window per buffer, though some restrict themselves to only one window and jump between their buffers via global marks and buffer commands. Still others manage their buffers and windows with tabs. No method is better or worse from my experience, but whatever method you choose, make sure you understand the ins and outs of how to navigate your workspace.</p>
+<p>To see a list of buffers use the <code>:buffers</code> or <code>:ls</code> command. It will produce something like the table below without the column names.</p>
+<table>
+<thead>
+<tr>
+<th>buffer #</th>
+<th>flags</th>
+<th>filepath</th>
+<th>cursorline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>#h</td>
+<td>"[No Name]"</td>
+<td>line 1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>%a +</td>
+<td>"file/path.md"</td>
+<td>line 103</td>
+</tr>
+</tbody>
+</table>
+<p>The first column is the buffer number; You can jump between buffers by pairing this number with the <code>:buffer</code> command (example: <code>:buffer 3</code>). The second column contains a set of flags which provide details about the buffer. See the table below for flag meanings.</p>
+<table>
+<thead>
+<tr>
+<th>Flags</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u</td>
+<td>The buffer is unlisted. Some buffers are unlisted by default like the help buffer from the <code>:help</code> command; these buffers will only appear via the <code>:buffers!</code> command.</td>
+</tr>
+<tr>
+<td>%</td>
+<td>This is the current buffer displayed on the window.</td>
+</tr>
+<tr>
+<td>#</td>
+<td>This is the previous buffer that was displayed on this window, You can jump back to it with <code>:buffer #</code>. Jumping between windows does NOT affect this flag, neither does opening unlisted buffers.</td>
+</tr>
+<tr>
+<td>a</td>
+<td>This buffer is loaded and displayed on a window. The window does not need to be on your screen.</td>
+</tr>
+<tr>
+<td>h</td>
+<td>This buffer is currently not displayed on a window.</td>
+</tr>
+<tr>
+<td>=</td>
+<td>This buffer is read-only and cannot be edited 🤞🏾. Technically you can still make edits and overwrite them with <code>:w!</code> but it will warn you not to. Use <code>:set readonly</code> to set it on the current buffer, <code>:set noreadonly</code> to remove readonly.</td>
+</tr>
+<tr>
+<td>-</td>
+<td>This buffer can't be modified, useful when you want to make sure the file really is uneditable. Use <code>:set nomodifiable</code> to turn it on and <code>:set modifiable</code> to turn it off.</td>
+</tr>
+<tr>
+<td>+</td>
+<td>This buffer has been modified.</td>
+</tr>
+</tbody>
+</table>
+<p>The third column is the file's filepath. If the current buffer has no file association, it will print "[No Name]" until you save/write that buffer to a file. The last column is the last cursorline position for that file. That way you don't have to keep jumping back to your place in the file when you move back to that buffer.</p>
+<p>Now since we're using windows to work with buffers we should also know some simple window management commands. </p>
+<table>
+<thead>
+<tr>
+<th>Window Command</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:new</code></td>
+<td>Open a new window horizontally.</td>
+</tr>
+<tr>
+<td><code>:vnew</code></td>
+<td>Open a new window vertically.</td>
+</tr>
+<tr>
+<td><code>:split</code></td>
+<td>Splits the current window into two horizontal windows. They'll display the same buffer when they first split.</td>
+</tr>
+<tr>
+<td><code>:vsplit</code></td>
+<td>Splits the current window into two vertical windows.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Window Movement</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CTRL-w w</code></td>
+<td>Cycle through windows.</td>
+</tr>
+<tr>
+<td><code>CTRL-w h</code></td>
+<td>Jump one window to the left.</td>
+</tr>
+<tr>
+<td><code>CTRL-w j</code></td>
+<td>jump one window down.</td>
+</tr>
+<tr>
+<td><code>CTRL-w k</code></td>
+<td>jump one window up.</td>
+</tr>
+<tr>
+<td><code>CTRL-w l</code></td>
+<td>jump one window right.</td>
+</tr>
+<tr>
+<td><code>CTRL-w H</code></td>
+<td>Moves the window toward the left and expands the window to use the screen's full height.</td>
+</tr>
+<tr>
+<td><code>CTRL-w J</code></td>
+<td>Moves the window down and expands the window to use the screen's full width.</td>
+</tr>
+<tr>
+<td><code>CTRL-w K</code></td>
+<td>Moves the window up and expands the window to use the screen's full width.</td>
+</tr>
+<tr>
+<td><code>CTRL-w L</code></td>
+<td>Moves the window toward the right and expands the window to use the screen's full height.</td>
+</tr>
+<tr>
+<td><code>CTRL-w -</code></td>
+<td>Decreases window height by one line; you can prepend a number. (ex. <code>Ctrl-w 10-</code> will decrease window height by 10 lines.)</td>
+</tr>
+<tr>
+<td><code>CTRL-w +</code></td>
+<td>Increases window height by one line; you can prepend a number.</td>
+</tr>
+<tr>
+<td><code>CTRL-w &lt;</code></td>
+<td>Decreases window width by one column; you can prepend a number.</td>
+</tr>
+<tr>
+<td><code>CTRL-w &gt;</code></td>
+<td>Increases window width by one column; you can prepend a number.</td>
+</tr>
+</tbody>
+</table>
+<p>You'll notice that the window commands re-use the same directional syntax as that found in normal mode. Technically you could also use the arrow keys, but I would advise against that. Another thing to note is that the commands for adjusting the window width are non-contextual so they might feel counterintuitive when facing their opposing edges.</p>
+<p>Neovim, just like Vim, has a built-in file explorer plugin called Netrw. We can open the file explorer by using the <code>:Explore</code> command. This command will open a file explorer buffer either on a new window or the current window. It will only split into a new window if the current buffer has been modified and the global boolean <code>hidden</code> is not set; by default, hidden is set. Otherwise, the command will swap out the current buffer on the window with the file explorer buffer. From this buffer there is a Quick help list that will help you navigate Netrw. As with normal mode, you can move around with <code>hjkl</code>, pressing enter will open the file/directory the cursor is on and there are additional commands to edit files or rename them.</p>
+<p>I haven't used Netrw in a while, so my advice is limited but I will say that if you want to keep your current buffer and not mess around with the buffer list as much, you can use other explore commands like <code>:Vexplore</code> and <code>Hexplore</code>. These will open the Netrw on a new vertical or horizontal window respectively. </p>
+<p>Finally, tabs can help you expand your workspace beyond the limitations of your monitor. Tabs hold sets of windows and you can alternate between them with tab commands. Their use case might seem strange when you consider how a buffer can be called to any window, but part of Neovim's versatility is offering many ways to organize your workspace.</p>
+<p>Use <code>:tabnew</code> to create a new tab. Neovim will move to that new tab on an empty buffer and at the top, you should see a new line indicating the tabs opened, this is the tablist. The current tab will be highlighted differently from the others. If you have more than one window open on a given tab, that tab will indicate the quantity of windows open. a <code>+</code> flag on the tab indicates that a buffer open in that tab has been modified. The name on the tab indicates which buffer the tab is focused on. Use <code>:tabs</code> to see a list of the tabs you have open and what number they correspond to; their number is subject to change based on its position in the tab list. Tabs are numbered from 1 onward. You can prepend a number to <code>:tabnew</code> to indicate where on the tab list you want the new tab to open, for instance <code>:0tabnew</code> will create that new tab at the far left of the list, that new tab will now be tab 1.</p>
+<p>There are a variety of ways to cycle between tabs. To move to the next tab to the right of the tab list, use <code>:tabnext</code>, <code>gt</code>, or <code>CTRL-PageDown</code>. For <code>:tabnext</code> and <code>gt</code>, you can prepend a number to move by multiples. (Ex. <code>:4tabnext</code> moves by 4 tabs to the right.) To move to the previous tab to the left of the tab list, use <code>:tabprevious</code>, <code>gT</code>, or <code>CTRL-PageUp</code>. As before, you can prepend a number to <code>:tabprevious</code> or <code>gT</code> to move in multiples.</p>
+<p>A thing to note with these movements is that the tablist wraps around. Additionally, you can go directly to any tab by providing the tab number to <code>:tabnext</code>; ex. <code>:tabnext 1</code> to go to the first tab.</p>
+<p>To close a tab, you can quit out of all windows in that tab or use <code>:tabclose</code>. Buffers you had open on this tab will become hidden. Neovim will warn you to save any edits if you forget you made edits to the buffers you opened on that tab, but the best practice is to always check your buffers before quitting.</p>
+<p>Further Reading:</p>
+<ul>
+<li><a href="https://neovim.io/doc/user/usr_22.html#22.4" rel="noopener noreferrer" target="blank">The buffer list</a></li>
+<li><a href="https://neovim.io/doc/user/windows.html" rel="noopener noreferrer" target="blank">Windows</a></li>
+<li><a href="https://neovim.io/doc/user/pi_netrw.html#netrw-quickhelp" rel="noopener noreferrer" target="blank">Netrw</a></li>
+<li><a href="https://neovim.io/doc/user/tabpage.html" rel="noopener noreferrer" target="blank">Tabs</a></li>
+</ul>
+<h2>Basic Settings</h2>
+<p>Now that Neovim is installed and you understand a bit more about movement, there's probably a few settings you'd like to change about how Neovim works by default. Generally speaking, settings should only be added or changed when you find a use for them in your workflow and you understand what you are changing. Changes suggested online, even in this post, without proper understanding of those changes will produce unfun experiences. Think of your settings as a work in progress that will evolve as you develop your own workflow; you don't need all of it figured out in one go.</p>
+<p>Below is a list of my most basic settings when I started using Neovim. I still use them in my day to day. You can make these same edits by following the instructions.</p>
+<ol>
+<li>go to your config file.
+    <pre><code>cd ~/.config/nvim/init.vim</code></pre></li>
+<li>If the file or directory doesn't exist, create them.
+    <pre><code>mkdir ~/.config/nvim</code></pre></li>
+<li>Copy the settings you want, then restart Neovim.
+    <pre><code>set number <span class="code-comment">" shows line number at the left side of the buffer</span>
+set autoindent expandtab tabstop=4 shiftwidth=4
+set cursorline <span class="code-comment">" highlights the current line the cursor is on in the buffer</span>
+set showmatch <span class="code-comment">" highlights the matching pair for [] {} ()</span>
+set showmode <span class="code-comment">" displays the mode you are in on the last line of the buffer</span>
+set ignorecase <span class="code-comment">" ignores case-sensitivity when searching with /</span>
+set incsearch <span class="code-comment">" displays incremental search results for / searches</span>
+set linebreak <span class="code-comment">" linebreaks between words instead of characters</span>
+set clipboard+=unnamedplus <span class="code-comment">" enables system clipboard</span></code></pre></li>
+</ol>
+<p>The settings above should all be pretty straightforward in what they do. <code>tabstop=4</code> and <code>shiftwidth=4</code> set tabs and shifts to be four spaces long, for example. <code>autoindent</code> automatically indents on a new line if you are working on an indent dependent file, such as a Python script.</p>
+<p>Perhaps the strangest setting here is <code>set clipboard+=unnamedplus</code>. On Linux, Neovim's clipboard is not automatically synced to your system's clipboard. This means you can't yank a line from Neovim and paste it (ctrl + v) elsewhere. To enable this function, <code>unnamedplus</code> must be appended to the clipboard options. The <code>+=</code> notation here tells Neovim to add <code>unnamedplus</code> onto the list of clipboard options it uses rather than overwriting them. </p>
+<p>Further Readings:</p>
+<ul>
+<li><a href="https://neovim.io/doc/user/vim_diff.html#nvim-defaults" rel="noopener noreferrer" target="blank">Neovim's Default Settings</a></li>
+<li><a href="https://neovim.io/doc/user/provider.html#provider-clipboard" rel="noopener noreferrer" target="blank">Clipboard Integration - Neovim Docs</a></li>
+<li><a href="https://neovim.io/doc/user/usr_05.html#usr_05.txt" rel="noopener noreferrer" target="blank">Set your settings - Neovim User Manual</a></li>
+</ul>
+<h2>Mapping your own hotkeys</h2>
+<p>Neovim has a lot of neat hotkeys, but some can be unintuitive, unergonomic, or not quite what you want. Luckily, Neovim lets you map custom hotkeys in the config file. Below is a set of mappings I use in my day to day.</p>
+<pre><code><span class="code-comment">" Maps split movements from &lt;ctrl + w + hjkl&gt; to &lt;shift + hjkl&gt;</span>
+nnoremap &lt;S-h&gt; &lt;C-w&gt;h
+nnoremap &lt;S-j&gt; &lt;C-w&gt;j
+nnoremap &lt;S-k&gt; &lt;C-w&gt;k
+nnoremap &lt;S-l&gt; &lt;C-w&gt;l
+<span class="code-comment">" Maps switch to normal mode (in insert and terminal mode) from Esc to jj</span>
+inoremap jj &lt;Esc&gt;
+tnoremap jj &lt;C-\&gt;&lt;C-n&gt;
+</code></pre>
+
+<p>The notes are pretty self-explanatory. The first settings let you move between buffers in normal mode by holding shift and picking a direction. I also changed how to exit into normal mode from insert and terminal mode to <code>jj</code>; a common mapping you've likely already seen. You'll notice different commands were used between the settings. If you're new to mappings, the section below contains a small intro.</p>
+<h3>What are maps?</h3>
+<p>At its core, the <code>*map</code> is a root command that tells Neovim to do X when you press Y. But because hotkeys can change depending on what mode you're in, you'll have to be specific about what mode you'd like your map command to apply to.</p>
+<table>
+<thead>
+<tr>
+<th>COMMANDS</th>
+<th>MODES</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:map</code></td>
+<td>Normal, Visual, Select, Operator-pending</td>
+</tr>
+<tr>
+<td><code>:nmap</code></td>
+<td>Normal</td>
+</tr>
+<tr>
+<td><code>:vmap</code></td>
+<td>Visual and Select</td>
+</tr>
+<tr>
+<td><code>:smap</code></td>
+<td>Select</td>
+</tr>
+<tr>
+<td><code>:xmap</code></td>
+<td>Visual</td>
+</tr>
+<tr>
+<td><code>:omap</code></td>
+<td>Operator-pending</td>
+</tr>
+<tr>
+<td><code>:map!</code></td>
+<td>Insert and Command-line</td>
+</tr>
+<tr>
+<td><code>:imap</code></td>
+<td>Insert</td>
+</tr>
+<tr>
+<td><code>:lmap</code></td>
+<td>Insert, Command-line, Lang-Arg</td>
+</tr>
+<tr>
+<td><code>:cmap</code></td>
+<td>Command-line</td>
+</tr>
+<tr>
+<td><code>:tmap</code></td>
+<td>Terminal</td>
+</tr>
+</tbody>
+</table>
+<p>From the chart above, a single letter is prefixed to map to indicate a specific mode. <code>:map</code> works in most common modes such as Normal, Visual, and Select, but <code>:imap</code> works exclusively in Insert mode. This clarifies to Neovim your mapping intentions, but modes are not the only prefix you ought to consider. </p>
+<p>By default, <code>*map</code> commands are recursive. This enables you to extend map commands on top of each other.</p>
+<pre><code>nmap s ggVG
+nmap yds sysd
+</code></pre>
+
+<p>In the settings above, pressing <code>s</code> will select all lines of a file and leave you in visual line mode, let's walk through it.</p>
+<ol>
+<li><code>gg</code> moves your cursorline to the top of the file. </li>
+<li><code>V</code> enters visual line mode, selecting the current line. </li>
+<li><code>G</code> moves your cursorline to the bottom of the file, thus selecting all lines in the process.</li>
+</ol>
+<p>Notice that the command can start in one mode and end in another and that doing so changes what the following commands do! Always take into account when a custom hotkey switches modes. Pressing <code>G</code> in visual line mode moves the cursorline to the bottom, as it would in normal mode, the difference here is that visual line mode selects lines as you navigate between them.</p>
+<p>Now that <code>s</code> selects all lines in a file, we can extend that command further. We know that in visual line mode, <code>d</code> deletes selected lines, <code>y</code> yanks them. Let's walk through the second command.</p>
+<ol>
+<li>Neovim sees <code>s</code> is mapped to <code>ggVG</code> and performs that hotkey function.</li>
+<li><code>y</code> yanks the selected lines</li>
+<li>Neovim sees <code>s</code> is mapped to <code>ggVG</code> and performs that hotkey function.</li>
+<li><code>d</code> deletes selected lines.</li>
+</ol>
+<p>This is all well and good, but because these maps are recursive, we may unintentionally create map commands that are infinitely recursive. Consider the map settings below.</p>
+<pre><code>nmap s ggVG
+nmap sd sysd
+</code></pre>
+
+<p>Let's walk through the loop.</p>
+<ol>
+<li><code>s</code> selects all lines.</li>
+<li><code>y</code> yanks selected lines.</li>
+<li><code>sd</code> is mapped to <code>sysd</code>.</li>
+<li><code>s</code> selects all lines.</li>
+<li><code>y</code> yanks selected lines.</li>
+<li><code>sd</code> is mapped to <code>sysd</code>...</li>
+</ol>
+<p>In this example, Neovim will continuously find <code>sd</code> is mapped to <code>sysd</code> and perform that action indefinitely. Press ctrl + c to exit this loop. </p>
+<p>Now, the obvious takeaway here is to not include the calling method for your custom hotkey inside that hotkey's instructions, but if you end up extending your hotkeys it can get complicated because one map command can call another.</p>
+<pre><code>nmap i o
+nmap o i
+</code></pre>
+
+<p>Therefore, it's generally recommended you only use the non-recursive forms of the <code>*map</code> commands when creating custom hotkeys. In order to use them simply add "nore" after the mode prefix. Doing so will limit you from extending other hotkeys but it will save you from creating infinite recursions.</p>
+<table>
+<thead>
+<tr>
+<th>COMMANDS</th>
+<th>MODES</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:noremap</code></td>
+<td>Normal, Visual, Select, Operator-pending</td>
+</tr>
+<tr>
+<td><code>:nnoremap</code></td>
+<td>Normal</td>
+</tr>
+<tr>
+<td><code>:vnoremap</code></td>
+<td>Visual and Select</td>
+</tr>
+<tr>
+<td><code>:snoremap</code></td>
+<td>Select</td>
+</tr>
+<tr>
+<td><code>:xnoremap</code></td>
+<td>Visual</td>
+</tr>
+<tr>
+<td><code>:onoremap</code></td>
+<td>Operator-pending</td>
+</tr>
+<tr>
+<td><code>:noremap!</code></td>
+<td>Insert and Command-line</td>
+</tr>
+<tr>
+<td><code>:inoremap</code></td>
+<td>Insert</td>
+</tr>
+<tr>
+<td><code>:lnoremap</code></td>
+<td>Insert, Command-line, Lang-Arg</td>
+</tr>
+<tr>
+<td><code>:cnoremap</code></td>
+<td>Command-line</td>
+</tr>
+<tr>
+<td><code>:tnoremap</code></td>
+<td>Terminal</td>
+</tr>
+</tbody>
+</table>
+<p>Further Reading:</p>
+<ul>
+<li><a href="https://learnvimscriptthehardway.stevelosh.com/chapters/03.html" rel="noopener noreferrer" target="blank"><em>Learn Vimscript the Hard Way</em></a></li>
+<li><a href="https://neovim.io/doc/user/map.html#map-overview" rel="noopener noreferrer" target="blank">Map Overview - Neovim Docs</a></li>
+</ul>
+<h2>Other small things</h2>
+<p>Finally, here's a list of cool commands I didn't know where else to include.</p>
+<h3>Sorting</h3>
+<p>If you ever have a list of lines you'd like to sort, there is a neat built-in feature called <code>:sort</code>.</p>
+<p>In visual line mode, select the lines you'd like sorted, then use <code>:sort</code>. (<code>:'&lt;,'&gt;</code> is shorthand for your current selection range and what you will likely see after pressing colon on your keyboard.)</p>
+<ol>
+<li>Take a list of things</li>
+</ol>
+<pre><code>- 1 Krenko, Mob Boss
+- 1 Goblin Bombardment
+- 1 Conspicuous Snoop
+- 1 Impact Tremors
+- 1 Skullclamp
+- 1 Rising of the Day
+- 30 Mountains</code></pre>
+<ol>
+<li>and sort them alphabetically!</li>
+</ol>
+<pre><code>- 1 Conspicuous Snoop
+- 1 Goblin Bombardment
+- 1 Impact Tremors
+- 1 Krenko, Mob Boss
+- 1 Rising of the Day
+- 1 Skullclamp
+- 30 Mountains</code></pre>
+
+<h3>Complex Repeats (AKA Macros)</h3>
+<p>Neovim always has 10 different ways of accomplishing your task, but there are cases where you'll find yourself stuck with a repetitive task. In these cases, complex repeats can alleviate you from the legwork you would otherwise have to sludge through.</p>
+<ol>
+<li>Start a macro recording: go to normal mode, press <code>q</code> followed by any letter or number. (this is case-sensitive.) For my example I will use y.</li>
+<li>record your actions. For my example I have recorded the same commands I did in the map section <code>ggVGy</code>; this will yank all lines in a file.</li>
+<li>end your recording by pressing <code>q</code> again.</li>
+<li>replay your recording with <code>@</code>. (ex. <code>@y</code>)</li>
+</ol>
+<p>In my example, the macro will copy all lines in a file. I can go ahead and open a new buffer and paste them, and then reuse <code>@y</code> in a third buffer and aggregate all files into a single buffer.</p>
+<p>You can also replay your recordings in multiples. For instance, <code>100@y</code> will copy all lines in a file 100 times! Additionally, complex repeats can use the same map commands set from the setting files. Again, always take into account when a recording enters a new mode as you would a map command; you will need to exit back into normal mode and press <code>q</code> in order to end the recording.</p>
+<p>This feature seems common to stumble upon but perhaps this is an anecdotal bias reinforced by <a href="https://stackoverflow.com/questions/1527784/what-is-vim-recording-and-how-can-it-be-disabled" rel="noopener noreferrer" target="blank">stackexchange</a>. In most cases you won't find yourself wanting to use this but it's worth knowing about on the off chance you do need it.</p>
+<h3>Substitution</h3>
+<p>You can find and replace words with the substitution command. The command is a bit unique in that the terms you plan on finding and replacing will be a part of the command, they will be divided with a forward slash as seen below. </p>
+<p><code>:&lt;area&gt;s/{find}/{replace}/{flags}</code></p>
+<p><code>&lt;area&gt;s</code> is required. It can be <code>%</code> to indicate every line in the file or <code>1,20</code> to indicate lines 1 through 20; ex. <code>:&amp;s</code> or <code>:1,10s</code>. You could also enter VISUAL mode, select an area, and type <code>:s</code> which will appear as <code>:'&lt;,'&gt;s</code>.</p>
+<p><code>/{find}/</code> is the search term. To include an actual forward slash use <code>\/</code>. You can use regular expressions for your search. You can see the words found as you type.</p>
+<p><code>/{replace}</code> is the replace term. You can see the replacements that will happen as you type.</p>
+<p><code>/{flags}</code> are optional. By default the <code>:s</code> command only substitutes the first instance in a line without confirmation after the command is run, you can add flags like <code>g</code> to make the substitutions global, meaning they happen to all instances in the <code>&lt;area&gt;</code>, or <code>c</code> to confirm each replacement one by one.</p>
+<p>Using all of this together, we could write out the command to find "here" and replace it with "there" for the first 100 lines of a buffer and have the command do it for every instance with a confirmation dialogue like so: <code>:1,100s/here/there/gc</code>.</p>
+<h3>Terminal</h3>
+<p>Use the <code>:terminal</code> command to open a terminal. Just like a file the terminal is contained in a buffer. by default it should drop you in the directory from where you opened Neovim. If you had any virtual environments opened when you opened Neovim, it should inherit them. Use <code>i</code> to enter terminal mode. Type in your command. Use <code>CTRL-\ CTRL-n</code> to exit terminal mode. Or if you added the cool new custom hotkey I mentioned in the mapping section, use <code>jj</code>! 😎</p>
+<p>Further Reading:</p>
+<ul>
+<li><a href="https://neovim.io/doc/user/change.html#sorting" rel="noopener noreferrer" target="blank">Sorting</a>. </li>
+<li><a href="https://neovim.io/doc/user/repeat.html#complex-repeat" rel="noopener noreferrer" target="blank">Complex Repeats</a></li>
+<li><a href="https://neovim.io/doc/user/usr_10.html#10.2" rel="noopener noreferrer" target="blank">Substitution</a></li>
+<li><a href="https://neovim.io/doc/user/nvim_terminal_emulator.html" rel="noopener noreferrer" target="blank">Terminal</a></li>
+</ul>
+<h1>Conclusion</h1>
+<p>There's a whole lot more I'd like to include in this post, like my favorite themes and plugins. But I think that's a matter of preference and strictly outside the scope of what I wanted to accomplish with this post. Plugins can dramatically alter the look, function, and feel of Neovim, and I think that introducing fancy plugins without proper knowledge of the default systems Neovim presents can be limiting in some ways. Anyway I hope this post has helped you. Shoot me an email if you liked the post and read to the end. Thanks!</p>
+
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 2.5rem .25rem .25rem .25rem;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    line-height: 140%;
+}
+
+h1, h2, h3, h4, p {
+    margin: 0;
+}
+
+.resume {
+    max-width: 60rem;
+    box-shadow: 6px 10px 10px 5px rgba(0, 0, 0, 0.1);
+    border: solid 1px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    padding: 2.5rem;
+}
+
+.title {
+    font-family: "Questrial", sans-serif;
+    text-align: center;
+}
+
+.contacts {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template: "number . email . github" 1fr / 1fr 10px auto 10px 1fr;
+    font-family: 'Merriweather', sans-serif;
+}
+
+#number {
+    grid-area: number;
+    text-align: right;
+}
+
+#email {
+    grid-area: email;
+}
+
+#github {
+    grid-area: github;
+    text-align: left;
+}
+
+section {
+    margin: 1rem 0;
+}
+
+.section-title {
+    font-family: 'Questrial', sans-serif;
+}
+
+hr {
+    border: 2px solid #f4b8e4;
+    margin: 0 0 1rem 0;
+}
+
+.item {
+    margin: 5px;
+}
+
+.item-title {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Questrial', sans-serif;
+}
+
+.right {
+    text-align: right;
+}
+
+.item-description {
+    font-family: 'Merriweather', sans-serif;
+}
+
+.italic {
+    font-family: 'Questrial', sans-serif;
+    font-weight: 100;
+    font-style: italic;
+    margin: 0.3rem 0;
+}
+
+ul {
+    padding-left: 25px;
+    margin: 0;
+    list-style: circle outside;
+}
+
+.diplomas {
+    font-family: 'Questrial', sans-serif;
+    list-style: none;
+}
+
+@media (max-width: 816px) {
+    .resume {
+        width: 100vw;
+        height: 100vh;
+        padding: 1rem;
+        margin: 0;
+        border: none;
+        box-shadow: none;
+    }
+
+    .diplomas {
+        font-style: italic;
+    }
+}
+
+.noprint {
+    margin: 2rem 0;
+    position: relative;
+}
